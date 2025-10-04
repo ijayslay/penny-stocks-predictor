@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PennyStock AI - Smart Penny Stock Analysis & Portfolio Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Navigation Header -->
+        <header class="app-header">
+            <div class="container flex items-center justify-between">
+                <div class="logo">
+                    <h1 class="logo-text">PennyStock AI</h1>
+                    <span class="logo-subtitle">Smart Analysis & Portfolio Management</span>
+                </div>
+                <nav class="nav-menu">
+                    <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+                    <button class="nav-btn" data-view="portfolio">Portfolio</button>
+                    <button class="nav-btn" data-view="education">Education</button>
+                    <button class="nav-btn" data-view="settings">Settings</button>
+                </nav>
+                <div class="theme-toggle">
+                    <button class="btn btn--outline btn--sm" id="themeToggle">🌙</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Dashboard View -->
+            <section class="view active" id="dashboard-view">
+                <div class="container">
+                    <!-- Risk Disclaimer Banner -->
+                    <div class="disclaimer-banner">
+                        <div class="disclaimer-content">
+                            <strong>⚠️ Investment Disclaimer:</strong> This tool provides analysis for educational purposes only. 
+                            Penny stocks carry high risks including limited liquidity, volatility, and potential for total loss. 
+                            Always consult with a financial advisor and never invest more than you can afford to lose.
+                        </div>
+                    </div>
+
+                    <!-- Stock Search Section -->
+                    <div class="search-section">
+                        <div class="card">
+                            <div class="card__body">
+                                <h2>Stock Analysis</h2>
+                                <p class="text-secondary">Enter a stock symbol to get comprehensive analysis and investment recommendations</p>
+                                
+                                <div class="search-container">
+                                    <div class="form-group">
+                                        <input type="text" id="stockInput" class="form-control search-input" 
+                                               placeholder="Enter stock symbol (e.g., RAJOO, CELLECOR)" 
+                                               autocomplete="off">
+                                        <div class="search-suggestions" id="searchSuggestions"></div>
+                                    </div>
+                                    <button class="btn btn--primary" id="analyzeBtn">
+                                        <span class="btn-text">Analyze Stock</span>
+                                        <span class="btn-spinner hidden">⟳</span>
+                                    </button>
+                                </div>
+
+                                <!-- Quick Access Stocks -->
+                                <div class="quick-access">
+                                    <span class="quick-label">Quick Access:</span>
+                                    <div class="quick-buttons">
+                                        <button class="btn btn--outline btn--sm quick-stock" data-symbol="RAJOO">RAJOO</button>
+                                        <button class="btn btn--outline btn--sm quick-stock" data-symbol="CELLECOR">CELLECOR</button>
+                                        <button class="btn btn--outline btn--sm quick-stock" data-symbol="RADHIKA">RADHIKA</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Results Section -->
+                    <div class="analysis-section hidden" id="analysisResults">
+                        <!-- Stock Overview Card -->
+                        <div class="stock-overview-card card">
+                            <div class="card__body">
+                                <div class="stock-header">
+                                    <div class="stock-info">
+                                        <h3 id="stockName" class="stock-name"></h3>
+                                        <span id="stockSymbol" class="stock-symbol"></span>
+                                        <span id="stockExchange" class="stock-exchange"></span>
+                                    </div>
+                                    <div class="stock-price">
+                                        <div id="currentPrice" class="price-large"></div>
+                                        <div id="marketCap" class="market-cap"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- ML Recommendation -->
+                                <div class="ml-recommendation">
+                                    <div class="recommendation-header">
+                                        <h4>AI Recommendation</h4>
+                                        <div id="confidenceScore" class="confidence-score"></div>
+                                    </div>
+                                    <div class="recommendation-content">
+                                        <div id="recommendationType" class="recommendation-type"></div>
+                                        <div id="investmentType" class="investment-type"></div>
+                                        <div id="recommendationReason" class="recommendation-reason"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Features Analysis Grid -->
+                        <div class="features-grid">
+                            <!-- Valuation Metrics -->
+                            <div class="feature-category card">
+                                <div class="card__body">
+                                    <h4 class="category-title">📊 Valuation Metrics</h4>
+                                    <div class="metrics-list" id="valuationMetrics"></div>
+                                </div>
+                            </div>
+
+                            <!-- Profitability Metrics -->
+                            <div class="feature-category card">
+                                <div class="card__body">
+                                    <h4 class="category-title">💰 Profitability</h4>
+                                    <div class="metrics-list" id="profitabilityMetrics"></div>
+                                </div>
+                            </div>
+
+                            <!-- Solvency Metrics -->
+                            <div class="feature-category card">
+                                <div class="card__body">
+                                    <h4 class="category-title">🏛️ Solvency</h4>
+                                    <div class="metrics-list" id="solvencyMetrics"></div>
+                                </div>
+                            </div>
+
+                            <!-- Market Activity -->
+                            <div class="feature-category card">
+                                <div class="card__body">
+                                    <h4 class="category-title">📈 Market Activity</h4>
+                                    <div class="metrics-list" id="marketMetrics"></div>
+                                </div>
+                            </div>
+
+                            <!-- Alternative Data -->
+                            <div class="feature-category card">
+                                <div class="card__body">
+                                    <h4 class="category-title">🌐 Alternative Data</h4>
+                                    <div class="metrics-list" id="alternativeMetrics"></div>
+                                </div>
+                            </div>
+
+                            <!-- Risk Assessment -->
+                            <div class="feature-category card risk-card">
+                                <div class="card__body">
+                                    <h4 class="category-title">⚠️ Risk Assessment</h4>
+                                    <div class="risk-indicators" id="riskIndicators"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="btn btn--primary" id="addToPortfolioBtn">Add to Portfolio</button>
+                            <button class="btn btn--secondary" id="addToWatchlistBtn">Add to Watchlist</button>
+                            <button class="btn btn--outline" id="analyzeAnotherBtn">Analyze Another</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Portfolio View -->
+            <section class="view" id="portfolio-view">
+                <div class="container">
+                    <h2>Portfolio Management</h2>
+                    
+                    <div class="portfolio-tabs">
+                        <button class="tab-btn active" data-tab="holdings">Holdings</button>
+                        <button class="tab-btn" data-tab="watchlist">Watchlist</button>
+                        <button class="tab-btn" data-tab="performance">Performance</button>
+                    </div>
+
+                    <div class="tab-content active" id="holdings-tab">
+                        <div class="portfolio-summary card">
+                            <div class="card__body">
+                                <h3>Portfolio Summary</h3>
+                                <div class="summary-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Total Holdings</span>
+                                        <span class="stat-value" id="totalHoldings">0</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Risk Level</span>
+                                        <span class="stat-value" id="portfolioRisk">-</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Diversification</span>
+                                        <span class="stat-value" id="diversificationScore">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="holdings-list" id="holdingsList">
+                            <div class="empty-state">
+                                <p>No holdings yet. Start by analyzing stocks and adding them to your portfolio.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="watchlist-tab">
+                        <div class="watchlist-container" id="watchlistContainer">
+                            <div class="empty-state">
+                                <p>No stocks in watchlist. Add interesting stocks to monitor their progress.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="performance-tab">
+                        <div class="performance-metrics card">
+                            <div class="card__body">
+                                <h3>Performance Analysis</h3>
+                                <p class="text-secondary">Track your investment performance and compare with benchmarks.</p>
+                                <div class="performance-content">
+                                    <div class="empty-state">
+                                        <p>Performance tracking will be available once you add stocks to your portfolio.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education View -->
+            <section class="view" id="education-view">
+                <div class="container">
+                    <h2>Penny Stock Education</h2>
+                    
+                    <div class="education-content">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Understanding Penny Stocks</h3>
+                                <p>Penny stocks are typically shares of companies with market capitalizations below $1 billion, 
+                                often trading at low prices with limited liquidity and analyst coverage.</p>
+                                
+                                <h4>Key Features We Analyze:</h4>
+                                <div class="feature-explanations">
+                                    <div class="feature-group">
+                                        <h5>Valuation Metrics</h5>
+                                        <ul>
+                                            <li><strong>P/E Ratio:</strong> Price-to-earnings ratio indicates if stock is over/undervalued</li>
+                                            <li><strong>P/B Ratio:</strong> Price-to-book ratio shows market premium to book value</li>
+                                            <li><strong>PEG Ratio:</strong> P/E divided by growth rate for growth-adjusted valuation</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="feature-group">
+                                        <h5>Risk Factors</h5>
+                                        <ul>
+                                            <li><strong>Low Liquidity:</strong> Difficulty buying/selling large quantities</li>
+                                            <li><strong>High Volatility:</strong> Significant price swings in short periods</li>
+                                            <li><strong>Limited Information:</strong> Sparse analyst coverage and financial data</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Investment Types Explained</h3>
+                                <div class="investment-types-grid" id="investmentTypesGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section class="view" id="settings-view">
+                <div class="container">
+                    <h2>Settings</h2>
+                    
+                    <div class="settings-content">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Risk Preferences</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Risk Tolerance</label>
+                                    <select class="form-control" id="riskTolerance">
+                                        <option value="conservative">Conservative</option>
+                                        <option value="moderate" selected>Moderate</option>
+                                        <option value="aggressive">Aggressive</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Minimum Liquidity Threshold</label>
+                                    <select class="form-control" id="liquidityThreshold">
+                                        <option value="low">Low (>10K daily volume)</option>
+                                        <option value="medium" selected>Medium (>50K daily volume)</option>
+                                        <option value="high">High (>100K daily volume)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Investment Horizon</label>
+                                    <select class="form-control" id="investmentHorizon">
+                                        <option value="short">Short-term (< 1 year)</option>
+                                        <option value="medium" selected>Medium-term (1-3 years)</option>
+                                        <option value="long">Long-term (> 3 years)</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn--primary">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay hidden" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>Fetching real-time data and running ML analysis...</p>
+                <div class="loading-steps">
+                    <div class="loading-step" id="step1">Fetching market data...</div>
+                    <div class="loading-step" id="step2">Calculating fundamental metrics...</div>
+                    <div class="loading-step" id="step3">Analyzing alternative data...</div>
+                    <div class="loading-step" id="step4">Running ML prediction model...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
